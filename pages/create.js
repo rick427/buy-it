@@ -54,11 +54,13 @@ function CreateProduct() {
     return mediaUrl;
   }
 
-  //@: HANDLESUBMITTED PRODUCT
+  //@: HANDLE CREATED PRODUCT
   async function handleSubmit(event){
     try {
       event.preventDefault();
+      setError('');
       setLoading(true);
+
       const mediaUrl = await handleImageUpload();
       
       const url = `${baseUrl}/api/product`;
