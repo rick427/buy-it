@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Input, TextArea, Button, Image, Message, Header, Icon} from 'semantic-ui-react';
+import axios from 'axios';
+import baseUrl from '../utils/baseUrl';
 
 const INITIAL_PRODUCT = {
   name: '',
@@ -10,12 +12,13 @@ const INITIAL_PRODUCT = {
 
 function CreateProduct() {
   const [mediaPreview, setMediaPreview] = useState('');
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [product, setProduct] = useState(INITIAL_PRODUCT);
 
   function handleChange(event){
     const { name, value, files } = event.target;
-    
+
     if(name === 'media' && files[0]){
       setProduct((prevState) => ({ ...prevState, media: files[0] }));
       setMediaPreview(window.URL.createObjectURL(files[0]));
@@ -25,8 +28,30 @@ function CreateProduct() {
     }
   }
 
-  function handleSubmit(event){
+  async function handleImageUpload(){
+    const data = new FormData();
+
+    data.append('file', product.media);
+    data.append('upload_preset', 'BUY-IT');
+    data.append('cloud_name', 'rick427');
+    const res = await axios.post(process.env.CLOUDINARY_URL, data);
+    const mediaUrl = res.data.url;
+
+    return mediaUrl;
+  }
+
+  async function handleSubmit(event){
     event.preventDefault();
+    setLoading(true);
+    const mediaUrl = await handleImageUpload();
+    
+    const url = `${baseUrl}/api/product`;
+    const {name, price, description} = product;
+    const payload = {name, price, description, mediaUrl};
+    const res = await axios.post(url, payload);
+    console.log({res});
+
+    setLoading(false);
     setProduct(INITIAL_PRODUCT);
     setSuccess(true);
   }
@@ -38,7 +63,7 @@ function CreateProduct() {
         Create New Product
       </Header>
 
-      <Form success={success} onSubmit={handleSubmit}>
+      <Form loading={loading} success={success} onSubmit={handleSubmit}>
         <Message success icon="check" header="Success!" content="Your product has been posted"/>
         <Form.Group widths="equal">
           <Form.Field 
@@ -83,6 +108,7 @@ function CreateProduct() {
         />
         <Form.Field 
           control={Button} 
+          disabled={loading}
           color="blue"
           icon="pencil" 
           content="Submit" 
