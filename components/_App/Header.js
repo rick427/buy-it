@@ -32,7 +32,7 @@ function Header() {
           </Menu.Item>
         </Link>
 
-        {user && <Link href="/create">
+        { <Link href="/create">
           <Menu.Item header active={isActive('/create')}>
             <Icon name="add square" size="large"/>
             Create
