@@ -3,10 +3,10 @@ import Layout from '../components/_App/Layout';
 
 class MyApp extends App {
   render() {
-    const { Component } = this.props;
+    const { Component, pageProps } = this.props;
     return (
       <Layout>
-        <Component />
+        <Component {...pageProps} />
       </Layout>
     );
   }
