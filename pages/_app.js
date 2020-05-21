@@ -1,9 +1,9 @@
 import App from "next/app";
+import axios from 'axios';
+import {parseCookies, destroyCookie} from 'nookies';
 import Layout from '../components/_App/Layout';
-import {parseCookies} from 'nookies';
 import {redirectUser} from '../utils/auth';
 import baseUrl from '../utils/baseUrl';
-import axios from 'axios';
 
 class MyApp extends App {
   static async getInitialProps({Component, ctx}){
@@ -29,8 +29,13 @@ class MyApp extends App {
         const res = await axios.get(url, payload);
         const user = res.data;
         pageProps.user = user;
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error getting current user', error);
+        // Throw out invalid token
+        destroyCookie(ctx, 'token');
+        // redirect to login page
+        redirectUser(ctx, '/login');
       }
     }
 
