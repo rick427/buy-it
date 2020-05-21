@@ -7,9 +7,9 @@ Router.onRouteChangeStart = () => Nprogress.start();
 Router.onRouteChangeComplete = () => Nprogress.done();
 Router.onRouteChangeError = () => Nprogress.done();
 
-function Header() {
+function Header({user}) {
+  console.log('user', user);
   const router = useRouter();
-  const user = false;
 
   function isActive (route) {
     return route === router.pathname;
@@ -32,7 +32,8 @@ function Header() {
           </Menu.Item>
         </Link>
 
-        { <Link href="/create">
+        {user && 
+        <Link href="/create">
           <Menu.Item header active={isActive('/create')}>
             <Icon name="add square" size="large"/>
             Create
