@@ -28,6 +28,13 @@ class MyApp extends App {
         const url = `${baseUrl}/api/account`;
         const res = await axios.get(url, payload);
         const user = res.data;
+        const isRoot = user.role === 'root';
+        const isAdmin = user.admin === 'admin';
+        // if authenticated but not admin or root, redirect
+        const isNotPermitted = !(isRoot || isAdmin) && ctx.pathname === '/create'
+        if(isNotPermitted){
+          redirectUser(ctx, '/')
+        }
         pageProps.user = user;
       } 
       catch (error) {
