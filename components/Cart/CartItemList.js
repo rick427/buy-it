@@ -3,7 +3,7 @@ import {Header, Segment, Button, Icon} from 'semantic-ui-react'
 function CartItemList() {
   const user = false;
   return (
-    <Segment secondar color="teal" inverted textAlign="center" placeholder>
+    <Segment secondary color="teal" inverted textAlign="center" placeholder>
       <Header icon>
         <Icon name="shopping cart"/>
         No products in your cart

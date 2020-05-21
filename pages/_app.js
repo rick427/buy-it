@@ -55,8 +55,6 @@ class MyApp extends App {
   }
 
   syncLogout = event => {
-    console.log(event)
-    console.log(event.key);
     if(event.key === 'logout'){
       console.log('%c Logged out successfully', 'color: #de2f40; background: #f5f5f5;')
       Router.push('/login')
